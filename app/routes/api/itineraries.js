@@ -5,47 +5,62 @@ const config = require('config');
 const ModelPath = '../../models/';
 
 const wrap = require('../../util/wrap.js');
+const places = require('../../util/places.js');
 
 router.get('/create', wrap(async (req, res) => {
-    const startLoc;
-    const startTime;
-    const endTime;
-    const date;
-    const categoryWeights;
-    const radius;
-    const useRadius; //boolean true or false, city or use specified locationand radius
-    const places;
-    const querykeys = ["art","museum", "night life", "park", "attraction"];
-    dayPeriods = [false,false,false]
-    if(startTime<1200) dayPeriods[0] = true;
-    if(startTime<1900 && endTime>1300) dayPeriods[1] = true;
-    if(startTime<2500 && endTime>2000) dayPeriods[2] = true;
+    // string
+    const startLoc = req.body.startLoc;
 
-    for(int i = 0; i < querykeys.length; i++){
-        templist=[]
-        if (useRadius){
-             templist = getPlacesWithinRange(startLoc, radius, querykeys[i])
+    // unix timestamp
+    const startTime = req.body.startTime;
 
-        }
-        else{
-            templist = getPlacesCity(city, querykeys[i]);
-        }
-        for(int j = 0; j < templist.length; j++){
-            templist.used = false;
-            templist[j].weight = templist[j].rating * categoryWeights[i] * 0.95**j;//assigning weight for each place, based on global rating times user assigned weight and decay factor (~35%)
-        }
-        places.push.apply(places,templist);
-    }
-    compareFunction(a, b){return b.weight - a.weight}
-    places.sort(compareFunction);
+    // unix timestamp
+    const endTime = req.body.endTime;
+
+    // unix timestamp
+    const date = req.body.date;
+
+    // number
+    const radius = req.body.radius;
+
+    /*
+    [
+        {query: 'art', weight: 5},
+        {query: 'park', weight: 6}
+    ];
+    */
+    const categories = req.body.categories;
+
+
+    const calcWeights = (places, weight) =>
+        places.map((place, index) => {
+            place.weight = place.rating * weight * (0.95 ** index);
+            return place;
+        });
+
+    const search = radius
+        ? category => calcWeights(places.getPlacesWithinRange(startLoc, radius, category.query), category.weight)
+        : category => calcWeights(places.getPlacesCity(city, category.query), category.weight);
+
+    const places = categories.map(search).sort((a, b) => b.weight - a.weight);
+
+    dayPeriods = [false, false, false];
+    if (startTime < 1200) dayPeriods[0] = true;
+    if (startTime < 1900 && endTime > 1300) dayPeriods[1] = true;
+    if (startTime < 2500 && endTime > 2000) dayPeriods[2] = true;
+
     counter = 0;
     dayOfWeek = date.getDay()
-    mainPlaces = [null,null,null]
-    while(dayPeriods[0]){
-        if(!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
-        for(int i = 0; i<places[counter].opening_hours.periods.length; i++){
-            if(places[counter].opening_hours.periods.open.day == dayOfWeek){
-                if(open<1200) {
+    mainPlaces = [null, null, null]
+    while (dayPeriods[0]) {
+        if (!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
+        for (int i = 0;
+        i < places[counter].opening_hours.periods.length;
+        i++
+    )
+        {
+            if (places[counter].opening_hours.periods.open.day == dayOfWeek) {
+                if (open < 1200) {
                     dayPeriods[0] = false;
                     mainPlaces[0] = places[counter];
                     places[counter].used = true;
@@ -55,12 +70,16 @@ router.get('/create', wrap(async (req, res) => {
         counter++;
     }
     counter = 0
-    while(dayPeriods[1]){
-        if(!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
-        for(int i = 0; i<places[counter].opening_hours.periods.length; i++){
-            if(places[counter].opening_hours.periods.open.day == dayOfWeek){
+    while (dayPeriods[1]) {
+        if (!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
+        for (int i = 0;
+        i < places[counter].opening_hours.periods.length;
+        i++
+    )
+        {
+            if (places[counter].opening_hours.periods.open.day == dayOfWeek) {
 
-                if(open<1900 && close > 1400) {
+                if (open < 1900 && close > 1400) {
                     dayPeriods[1] = false;
                     mainPlaces[1] = places[counter];
                     places[counter].used = true;
@@ -70,11 +89,15 @@ router.get('/create', wrap(async (req, res) => {
         counter++;
     }
     counter = 0
-    while(dayPeriods[2]){
-        if(!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
-        for(int i = 0; i<places[counter].opening_hours.periods.length; i++){
-            if(places[counter].opening_hours.periods.open.day == dayOfWeek){
-                if(open<2500 && close>2000) {
+    while (dayPeriods[2]) {
+        if (!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
+        for (int i = 0;
+        i < places[counter].opening_hours.periods.length;
+        i++
+    )
+        {
+            if (places[counter].opening_hours.periods.open.day == dayOfWeek) {
+                if (open < 2500 && close > 2000) {
                     dayPeriods[2] = false;
                     mainPlaces[2] = places[counter];
                     places[counter].used = true;
@@ -83,7 +106,6 @@ router.get('/create', wrap(async (req, res) => {
         }
         counter++;
     }
-
 
 
     res.sendStatus(200);
