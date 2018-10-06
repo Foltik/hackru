@@ -1,3 +1,31 @@
-#a {
-    color: #aaa
+body {
+    background: #222;
+    color: #eee;
+
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 400px;
+    background: #333;
+}
+
+.sidebar-title {
+    background: #555;
+    color: #eee;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-body {
+    background: #444;
 }
