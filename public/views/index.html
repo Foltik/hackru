@@ -12,15 +12,18 @@
 </head>
 <body ng-app="hackru">
 <div class="container">
-    <div class="sidebar-title" ng-click="$state.go('home')"><span>HackRU</span></div>
     <div class="sidebar">
-        <nav id="nav">
-					<ul>
-            <li>
-                <a draggable="false" ui-sref="test" ng-class="{active: $state.$current.name == 'test'}">Test</a>
+        <div class="sidebar-title" ng-click="$state.go('home')"><span>HackRU</span></div>
+        <ul class="nav">
+            <li ng-class="{active: $state.$current.name == 'test'}">
+                <span><i class="fa fa-cog fa-2x"></i></span>
+                <a draggable="false" ui-sref="test">Test</a>
             </li>
-					</ul>
-        </nav>
+            <li ng-class="{active: $state.$current.name == 'create'}">
+                <span><i class="fa fa-calendar-plus fa-2x"></i></span>
+                <a draggable="false" ui-sref="create">Create</a>
+            </li>
+        </ul>
     </div>
     <div class="view" ui-view>
     </div>

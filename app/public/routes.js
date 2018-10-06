@@ -1,6 +1,6 @@
 var angular = require('angular');
 
-angular.module('Routes', ['ui.router']).config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
+angular.module('Routes', ['ui.router']).config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 
     $stateProvider
@@ -11,5 +11,9 @@ angular.module('Routes', ['ui.router']).config(['$stateProvider', '$urlRouterPro
         .state('test', {
             url: '/test',
             templateUrl: 'views/test.html'
+        })
+        .state('create', {
+            url: '/create',
+            templateUrl: '/views/create.html'
         });
 }]);

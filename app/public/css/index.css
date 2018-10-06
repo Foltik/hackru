@@ -1,31 +1,84 @@
-body {
-    background: #222;
-    color: #eee;
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-#container {
+body {
+    font: 18px 'FontAwesome', sans-serif;
+    font-weight: 300;
+    color: #000;
+    background: #fff;
+}
+
+.container {
     display: flex;
     flex-direction: row;
-    height: 100%;
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 
-#sidebar {
+.view {
+    width: auto;
+    height: auto;
+    background: #fff;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.sidebar {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 400px;
-    background: #333;
+    width: 360px;
+    background: #222;
 }
+
 
 .sidebar-title {
-    background: #555;
-    color: #eee;
+    height: 80px;
+    
+    cursor: pointer;
+
     display: flex;
+    justify-content: center;
     align-items: center;
+
+    height: 60px;
 }
 
-.sidebar-body {
-    background: #444;
+.sidebar-title span {
+    color: #fff;
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.nav li {
+    background: #222;
+    padding: 20px 50px 20px 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #eee;
+}
+
+.nav li a {
+    font-size: 24px;
+    color: #eee;
+    text-decoration: none;
+    outline: none;
+}
+
+.nav li.active {
+    background: #151515;
+    color: #ff2400
+}
+
+i {
+    font-size: 14px;
 }
