@@ -13,7 +13,15 @@ const cleanCSS = require('gulp-clean-css');
 const nodemon = require('gulp-nodemon');
 const path = require('path');
 
-gulp.task('start', (done) => {
+const fileToTask = filename => {
+    switch(path.extname(filename)) {
+        case '.js': return 'MakeJS';
+        case '.css': return 'MakeCSS';
+        default: return;
+    }
+};
+
+gulp.task('start', done => {
     nodemon({
         script: 'server.js',
         ignore: '*.*'
@@ -21,7 +29,7 @@ gulp.task('start', (done) => {
     done();
 });
 
-gulp.task('watch', (done) => {
+gulp.task('watch', done => {
     nodemon({
         script: 'server.js',
         ext: 'js html css',
@@ -30,19 +38,9 @@ gulp.task('watch', (done) => {
             'app/',
             'config/'
         ],
-        tasks: function (changedFiles) {
-            var tasks = [];
-            changedFiles.forEach(function (file) {
-                if (path.extname(file) === '.js' && !~tasks.indexOf('MakeJS'))
-                    tasks.push('MakeJS');
-                if (path.extname(file) === '.css' && !~tasks.indexOf('MakeCSS'))
-                    tasks.push('MakeCSS');
-            });
-            return tasks;
-        }
-    }).on('restart?', function () {
-        gulp.task('default')();
-    });
+        tasks: (changedFiles = []) => [...(new Set(changedFiles.map(fileToTask)))]
+    }).on('restart?', () => gulp.task('default')())
+      .on('quit', () => done());
 });
 
 gulp.task('MinifyCSS', () => {
