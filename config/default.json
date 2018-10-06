@@ -1,0 +1,23 @@
+{
+  "Server": {
+    "port": 443,
+    "hostname": "https://hackru.com"
+  },
+  "Database": {
+    "host": "mongodb://localhost:27017/hackru"
+  },
+  "User": {
+    "Username": {
+      "maxLength": 36,
+      "restrictedChars": "\\s"
+    },
+    "Password": {
+      "saltLength": 64,
+      "hashIterations": 25000
+    }
+  },
+  "Log": {
+    "http": true,
+    "httpLevel": "combined"
+  }
+}

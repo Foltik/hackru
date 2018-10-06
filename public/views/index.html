@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <base href="/"/>
+    <title>Panel</title>
+    <link rel="stylesheet" href="/css/hackru.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <script src="/js/hackru.bundle.js"></script>
+</head>
+<body ng-app="hackru">
+<div class="container">
+    <div class="sidebar-title" ng-click="$state.go('home')"><span>HackRU</span></div>
+    <div class="sidebar">
+        <ul class="nav">
+            <li>
+                <span class="nav-icon"><i class="fa fa-tachometer"></i></span>
+                <a draggable="false" ui-sref="test" ng-class="{active: $state.$current.name == 'test'}">Test</a>
+            </li>
+        </ul>
+    </div>
+    <div class="view" ui-view>
+    </div>
+</div>
+</body>
+</html>

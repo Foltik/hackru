@@ -1,0 +1,12 @@
+{
+  "Server": {
+    "port": 8080,
+    "hostname": "http://localhost:8080"
+  },
+  "Database": {
+    "host": "mongodb://localhost:27017/hackru-dev"
+  },
+  "Log": {
+    "httpLevel": "dev"
+  }
+}
