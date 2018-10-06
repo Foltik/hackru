@@ -46,8 +46,11 @@ gulp.task('watch', done => {
 gulp.task('MinifyCSS', () => {
     const files = [
         {
-            src: 'app/public/css/index.css',
-            dest: 'index.min.css'
+            src: [
+                'app/public/css/**/*.css',
+                'app/public/css/*.css'
+            ],
+            dest: 'hackru.min.css'
         }
     ];
 
