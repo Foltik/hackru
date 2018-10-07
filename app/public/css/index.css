@@ -186,7 +186,7 @@ header {
    bottom: 0;
    width: 50%;
    color: black;
-   float: right;
+   margin: 0;
 }
 .title{
     text-align: center;
