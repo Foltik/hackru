@@ -1,5 +1,5 @@
 const axios = require('axios');
-let key = '&key=AIzaSyCL2k612OOVYYxrqP2j7t1ty8nANPpQlPE';
+let key = '&key=APIKEY';
 const getPlacesWithinRange = async (location = [51.517752, -0.064974], radius = 5000, query = 'museum') => {
     const uri = 'https://maps.googleapis.com/maps/api/place/textsearch/json?location='+location[0] + ',' + location[1] + '&radius=' + radius + '&query=' + query + key;
     return (await axios.get(uri)).data.results;

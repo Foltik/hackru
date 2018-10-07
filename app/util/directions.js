@@ -7,7 +7,7 @@ const getDistanceMatrix = async (places, time) => {
         locationsString += places[i].geometry.location.lat + ',' + places[i].geometry.location.lng + "|"
     }
     locationsString = locationsString.slice(0, locationsString.length - 1);
-    let query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + locationsString + "&units=imperial&destinations=" + locationsString + "&departure_time=" + (time.getTime() / 1000) + "&mode=transit&key=AIzaSyCL2k612OOVYYxrqP2j7t1ty8nANPpQlPE";
+    let query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + locationsString + "&units=imperial&destinations=" + locationsString + "&departure_time=" + (time.getTime() / 1000) + "&mode=transit&key=APIKEY";
     const res = await axios.get(query);
     let matrix = [];
     for (let i = 0; i < res.data.rows.length; i++) {
@@ -20,7 +20,7 @@ const getDistanceMatrix = async (places, time) => {
 };
 
 const getDir = async (origin, dest, time) => {
-    let query = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&dest=" + dest + "&mode=transit&departure_time=" + time + "&key=AIzaSyCL2k612OOVYYxrqP2j7t1ty8nANPpQlPE";
+    let query = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&dest=" + dest + "&mode=transit&departure_time=" + time + "&key=APIKEY";
     const promise = axios.get(query);
     const res = await promise;
     return res.routes[0];
