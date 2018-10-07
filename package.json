@@ -15,6 +15,7 @@
     "express": "^4.16.3",
     "express-sanitizer": "^1.0.4",
     "express-session": "^1.15.6",
+    "geolib": "^2.0.24",
     "gulp-nodemon": "^2.2.1",
     "helmet": "^3.13.0",
     "method-override": "latest",
