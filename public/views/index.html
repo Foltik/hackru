@@ -23,6 +23,10 @@
                 <span><i class="fa fa-calendar-plus fa-2x"></i></span>
                 <a draggable="false" ui-sref="create">Create</a>
             </li>
+            <li ng-class="{active: $state.$current.name == 'viewitinerary'}">
+                <span><i class="fa fa-map fa-2x"></i></span>
+                <a draggable="false" ui-sref="viewitinerary">View Itinerary</a>
+            </li>
         </ul>
     </div>
     <div class="view" ui-view>

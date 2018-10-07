@@ -15,5 +15,9 @@ angular.module('Routes', ['ui.router']).config(['$stateProvider', '$urlRouterPro
         .state('create', {
             url: '/create',
             templateUrl: '/views/create.html'
+        })
+        .state('viewitinerary', {
+            url: '/viewitinerary',
+            templateUrl: '/views/viewitinerary.html'
         });
 }]);

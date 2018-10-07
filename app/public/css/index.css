@@ -10,7 +10,7 @@
 
 body {
     font: 18px 'FontAwesome', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     color: #000;
     background: #fff;
 }
@@ -40,7 +40,7 @@ body {
 
 .sidebar-title {
     height: 80px;
-    
+
     cursor: pointer;
 
     display: flex;
@@ -81,4 +81,87 @@ body {
 
 i {
     font-size: 14px;
+}
+input[type=text] {
+    font: 12px 'FontAwesome', sans-serif;
+	border-radius: 25px;
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+input[type=text]:focus {
+    border: 3px solid #555;
+}
+[type="date"] {
+    font: 12px 'FontAwesome', sans-serif;
+    background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+    border-radius: 25px;
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+[type="time"]{
+    font: 12px 'FontAwesome', sans-serif;
+    border-radius: 25px;
+    width: 10%;
+    padding: 10px 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    margin-left: 20px;
+    -webkit-appearance: none;
+    width: 800%;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+.slider:hover {
+    opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ff2400;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 25%;
+    background: #ff2400;
+    cursor: pointer;
 }
