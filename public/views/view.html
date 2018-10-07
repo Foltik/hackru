@@ -1,0 +1,20 @@
+<div class="inner" ng-controller="ItineraryController" ng-init="load();">
+    <h1>Your Itinerary</h1>
+    <div class="card-container" ng-repeat="loc in data">
+        <div class="card">
+            <img src="{{loc.icon}}" alt="{{loc.name}}">
+            <div class="card-info">
+                <h3>{{loc.name}}</h3>
+                <h4>{{loc.formatted_address}}</h4>
+            </div>
+        </div>
+        <div class="lower">
+            <div class="lower-item">
+                Rating: {{loc.rating}}
+            </div>
+            <div class="lower-item">
+                Types: {{loc.types}}
+            </div>
+        </div>
+    </div>
+</div>

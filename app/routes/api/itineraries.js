@@ -107,14 +107,25 @@ const timeFrames = (startTime, endTime) => {
 ];
 */
 
+router.get('/test', wrap(async (req, res) => {
+    console.log(req.query);
+    res.sendStatus(200);
+}));
+
 router.get('/create', wrap(async (req, res) => {
+    console.log(req.query);
+
     const startLoc = JSON.parse(req.query.startLoc);
     const startTime = parseInt(req.query.startTime);
     const endTime = parseInt(req.query.endTime);
-    const date = new Date(parseInt(req.query.date, 10));
+    const date = new Date(req.query.date);
     const radius = parseInt(req.query.radius);
 
-    const categories = JSON.parse(req.query.categories);
+    let categories;
+    if (req.query.categories instanceof Array)
+        categories = req.query.categories.map(c => JSON.parse(c));
+    else
+        categories = JSON.parse(req.query.categories);
 
     const search = radius
         ? async category => weightPlaces(await placeUtil.getPlacesWithinRange(startLoc, radius, category.query), category.weight)
@@ -173,12 +184,6 @@ router.get('/create', wrap(async (req, res) => {
         ...primaryPlaces.map(place => [0, 30000/*place.interval.start, place.interval.end*/]),
         ...subPlaces.map(subPlace => [0, 30000/*subPlace.interval.start, subPlace.interval.end*/])
     ];
-    console.log('WINDOWS:');
-    console.log(windows);
-    console.log('\n\n\n');
-
-    console.log('PLACES:');
-    console.log(allPlaces);
 
     const costs = await directionUtil.getDistanceMatrix(allPlaces, date);
 

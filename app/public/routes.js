@@ -8,16 +8,12 @@ angular.module('Routes', ['ui.router']).config(['$stateProvider', '$urlRouterPro
             url: '/',
             templateUrl: '/views/home.html'
         })
-        .state('test', {
-            url: '/test',
-            templateUrl: 'views/test.html'
-        })
         .state('create', {
             url: '/create',
             templateUrl: '/views/create.html'
         })
-        .state('viewitinerary', {
-            url: '/viewitinerary',
-            templateUrl: '/views/viewitinerary.html'
+        .state('view', {
+            url: '/view',
+            templateUrl: '/views/view.html'
         });
 }]);

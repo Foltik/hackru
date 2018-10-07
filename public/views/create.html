@@ -1,6 +1,5 @@
-<div class="inner">
+<div class="inner" ng-controller="ItineraryController">
     <h1 align="center">Create Your Itinerary</h1>
-    <br>
     <form>
         Where Will You Be Staying?<br>
         <input type="text" name="loc" ng-model="loc">
@@ -12,17 +11,49 @@
         <input type="date" name="date" ng-model="date">
         <br>
         Time?<br>
-        From <input type="time" name="starttime" ng-model="starttime"> To <input type="time" name="endtime" ng-model="endttime">
+        From <input type="time" name="starttime" ng-model="starttime"> To <input type="time" name="endtime" ng-model="endtime">
         <br>
         What are you interested in?
         <div class="slidecontainer">
-            <table style="width:10%"><br>
-                <tr><td>Art</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="art"><br></td></tr>
-                <tr><td>Parks</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="parks"></td></tr>
-                <tr><td>Landmarks</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="landmarks"></td></tr>
-                <tr><td>Nightlife</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="nightlife"></td></tr>
-                <tr><td>Shopping</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="shopping"></td></tr>
+            <table>
+                <tr>
+                    <td>Art</td>
+                    <td>
+                        <input type="range" min="0" max="9" value="5" class="slider" id="myRange" ng-model="art">
+                        <span ng-bind="art"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Parks</td>
+                    <td>
+                        <input type="range" min="0" max="9" value="5" class="slider" id="myRange" ng-model="parks">
+                        <span ng-bind="parks"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Landmarks</td>
+                    <td>
+                        <input type="range" min="0" max="9" value="5" class="slider" id="myRange" ng-model="landmarks">
+                        <span ng-bind="landmarks"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nightlife</td>
+                    <td>
+                        <input type="range" min="0" max="9" value="5" class="slider" id="myRange" ng-model="nightlife">
+                        <span ng-bind="nightlife"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Shopping</td>
+                    <td>
+                        <input type="range" min="0" max="9" value="5" class="slider" id="myRange" ng-model="shopping">
+                        <span ng-bind="shopping"></span>
+                    </td>
+                </tr>
             </table>
         </div>
     </form>
+    <button ng-click="createItinerary()">Create</button>
+    <button ng-click="test()">test</button>
 </div>
