@@ -1,6 +1,6 @@
 <div class="inner" ng-controller="ItineraryController" ng-init="load();">
+    <h1><a href="{{data[0].full_plot}}">Your Itinerary</a></h1>
     <div class="card-container" ng-repeat="loc in data">
-        <h1>Your Itinerary for {{Date.now()}}</h1>
         <div class="card">
             <img src="{{loc.icon}}" alt="{{loc.name}}">
             <div class="card-info">
@@ -14,6 +14,9 @@
             </div>
             <div class="lower-item">
                 Types: {{loc.types}}
+            </div>
+            <div class="lower-item">
+                <a href="{{loc.maps_url}}">Directions</a>
             </div>
         </div>
     </div>

@@ -13,16 +13,16 @@ const getDistanceMatrix = async (places, time) => {
     for (let i = 0; i < res.data.rows.length; i++) {
         matrix.push([]);
         for (let j = 0; j < res.data.rows[i].elements.length; j++) {
-            matrix[i].push(res.data.rows[i].elements[j].duration.value / 60 / 60);
+            matrix[i].push(res.data.rows[i].elements[j].duration?res.data.rows[i].elements[j].duration.value / 60 / 60:0);
         }
     }
     return matrix;
 };
 
 const getDir = async (origin, dest, time) => {
-    //'''Returns the route from google directions between the origin and destination departing at the given time in second from epoch. Transit mode is public transit'''
-    let query = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&dest" + dest + "&mode=transit&departure_time=" + time + "&key=AIzaSyCL2k612OOVYYxrqP2j7t1ty8nANPpQlPE"
-    const res = await axios.get(query);
+    let query = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&dest=" + dest + "&mode=transit&departure_time=" + time + "&key=AIzaSyCL2k612OOVYYxrqP2j7t1ty8nANPpQlPE";
+    const promise = axios.get(query);
+    const res = await promise;
     return res.routes[0];
 };
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const config = require('config');
+const geolib = require('geolib');
 
 const ModelPath = '../../models/';
 
@@ -16,29 +17,29 @@ const weightPlaces = (places, weight) =>
     });
 const placeToEvent = (place) => {
     let event = {
-        "type":"place",
-        "name":place.name,
-        "photo_reference":place.photos.photo_reference,
-        "more_info":{
+        "type": "place",
+        "name": place.name,
+        "photo_reference": place.photos.photo_reference,
+        "more_info": {
             "rating": place.rating,
             "tags": place.types,
             "address": place.formatted_address,
         }
-    }
+    };
     return event;
 };
-const directionsToEvent = async(start, end, time) => {
+const directionsToEvent = async (start, end, time) => {
     let direction = await directionUtil.getDir(start, end, time);
     let event = {
-        "type":"transit",
-        "name":"Transit from "+start.name+" to "+end.name,
-        "start_time":direction.routes[0].legs[0].departure_time.value,
-        "end_time":direction.routes[0].legs[0].arrival_time.value,
-        "more_info":{
-            "route":direction.routes[0].legs[0].steps,
-            "fare":direction.routes[0].fare.text,
+        "type": "transit",
+        "name": "Transit from " + start.name + " to " + end.name,
+        "start_time": direction.routes[0].legs[0].departure_time.value,
+        "end_time": direction.routes[0].legs[0].arrival_time.value,
+        "more_info": {
+            "route": direction.routes[0].legs[0].steps,
+            "fare": direction.routes[0].fare.text,
         }
-    }
+    };
     return event;
 };
 const getHours = async (place, date) => {
@@ -68,15 +69,17 @@ const getHours = async (place, date) => {
     return place.hours;
 };
 
-const nextOpenBetween = async (places, date, interval) => {
+const nextOpenBetween = async (places, date, interval, startLoc) => {
     for (let i = 0; i < places.length; i++) {
         const place = places[i];
         //const hours = await getHours(place, date);
         if (!place.used
-            /*
-            && !hours.closed
-            && hours.opening <= interval.start
-            && hours.closing >= interval.end*/) {
+        /*
+        && !hours.closed
+        && hours.opening <= interval.start
+        && hours.closing >= interval.end
+        && startLoc ? geolib.getDistance({latitude: place.geometry.location.lat, longitude: place.geometry.location.lng},
+                {latitude: startLoc[0], longitude: starLoc[1]}) <= 3200 : true*/) {
             place.used = true;
             place.window = [interval.start, interval.end];
             return place;
@@ -188,7 +191,7 @@ router.get('/create', wrap(async (req, res) => {
         let time = times[i];
         if (time.numSubEvents) {
             for (let j = 0; j < time.numSubEvents; j++) {
-                const subPlace = await nextOpenBetween(places, date, time);
+                const subPlace = await nextOpenBetween(places, date, time, {lat: startLoc[0], lng: startLoc[1]});
                 if (subPlace) {
                     subPlace.interval = time;
                     subPlace.secondary = true;
@@ -224,25 +227,55 @@ router.get('/create', wrap(async (req, res) => {
 
     let path = (await promise).routes[0];
     path = path.map((p, index) => allPlaces[index]);
-    googleTime = date.getTime()/1000 + (Math.floor(startTime/100))*3600 + startTime%100*60;
-    path.firstDirections=directionsToEvent(startLoc[0]+","+startLoc[1],path[0].formatted_address,googleTime));
-    firstTime = path.firstDirections.end_time;
-    path[0].start_time=firstTime;
-    for(let i = 0; i<path.length-1; i++){
-        if(!path[i].start_time) path[i].start_time = path[i-1].directions.end_time;
-        let elapsed = 3600;
-        if(path[i].primary) elapsed *= 2;
-        path[i].end_time = path[i].start_time+elapsed;
-        path[i].directions = (directionsToEvent(path[i].formatted_address, path[i+1].formatted_address,path[i].end_time));
-        path[i].photoURL = placeUtil.getPlacePhotoURL(path[i].photo.photo_reference,80);
+
+    const toNice = arr => {
+        let str = '';
+        for (let i = 0; i < arr.length; i++)
+            str += arr[i] + ', ';
+        return str;
+    };
+
+    path = path.map(loc => {
+        loc.types = toNice(loc.types);
+        return loc;
+    });
+
+    path = path.map((loc, index) => {
+        if (index === 0) {
+            loc.maps_url = 'https://www.google.com/maps/dir/' + startLoc[0] + ',' + startLoc[1] + '/' + loc.formatted_address;
+        } else {
+            loc.maps_url = 'https://www.google.com/maps/dir/' + path[index - 1].formatted_address + '/' + loc.formatted_address;
+        }
+        return loc;
+    });
+
+    let url = 'https://www.google.com/maps/dir/';
+    for(let i = 0; i < path.length; i++) {
+        url += path[i].formatted_address + '/';
     }
-    path[path.length].start_time = path[path.length-1].directions.end_time;
+    path[0].full_plot = url;
+
+    /*
+    googleTime = date.getTime() / 1000 + (Math.floor(startTime / 100)) * 3600 + startTime % 100 * 60;
+    path.firstDirections = await directionsToEvent(startLoc[0] + "," + startLoc[1], path[0].geometry.location.lng + ',' + path[0].geometry.location.lon, googleTime);
+    firstTime = path.firstDirections.end_time;
+    path[0].start_time = firstTime;
+    for (let i = 0; i < path.length - 1; i++) {
+        if (!path[i].start_time) path[i].start_time = path[i - 1].directions.end_time;
+        let elapsed = 3600;
+        if (path[i].primary) elapsed *= 2;
+        path[i].end_time = path[i].start_time + elapsed;
+        path[i].directions = (await directionsToEvent(path[i].formatted_address, path[i + 1].formatted_address, path[i].end_time));
+        path[i].photoURL = await placeUtil.getPlacePhotoURL(path[i].photo.photo_reference, 80);
+    }
+    path[path.length].start_time = path[path.length - 1].directions.end_time;
     let elapsed = 3600;
-    if(path[path.length].primary) elapsed *= 2;
-    path[path.length].end_time = path[path.length].start_time+elapsed;
-    path[path.length].directions = (directionsToEvent(path[path.length].formatted_address, path[path.length+1].formatted_address,path[path.length].end_time));
-    path[path.length].photoURL = placeUtil.getPlacePhotoURL(path[path.length].photo.photo_reference,80);
-    path[path.length].directions = (directionsToEvent(path[path.length],startLoc[0]+","+startLoc[1],response[response.length].endTime));
+    if (path[path.length].primary) elapsed *= 2;
+    path[path.length].end_time = path[path.length].start_time + elapsed;
+    path[path.length].directions = (await directionsToEvent(path[path.length].formatted_address, path[path.length + 1].formatted_address, path[path.length].end_time));
+    path[path.length].photoURL = await placeUtil.getPlacePhotoURL(path[path.length].photo.photo_reference, 80);
+    path[path.length].directions = (await directionsToEvent(path[path.length], startLoc[0] + "," + startLoc[1], response[response.length].endTime));
+    */
 
     res.status(200).json(path);
 }));

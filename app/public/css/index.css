@@ -210,6 +210,12 @@ td span {
     flex-direction:column;
     padding:10px;
 }
+.card-info h3 {
+    padding: 10px;
+}
+.card-info h4 {
+    padding: 10px;
+}
 .lower {
     display:flex;
     flex-direction:column;
