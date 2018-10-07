@@ -223,20 +223,26 @@ router.get('/create', wrap(async (req, res) => {
         windows);
 
     let path = (await promise).routes[0];
-    let response = {};
     path = path.map((p, index) => allPlaces[index]);
     googleTime = date.getTime()/1000 + (Math.floor(startTime/100))*3600 + startTime%100*60;
-    response.push(directionsToEvent(startLoc[0]+","+startLoc[1],path[0].formatted_address,googleTime));
+    path.firstDirections=directionsToEvent(startLoc[0]+","+startLoc[1],path[0].formatted_address,googleTime));
+    firstTime = path.firstDirections.end_time;
+    path[0].start_time=firstTime;
     for(let i = 0; i<path.length-1; i++){
-        let currentPlace = placeToEvent(path[i]);
-        currentPlace.startTime = response[response.length-1].endTime;
+        if(!path[i].start_time) path[i].start_time = path[i-1].directions.end_time;
         let elapsed = 3600;
-        if(currentPlace.primary) elapsed *= 2;
-        currentPlace.endTime = currentPlace.startTime + elapsed;
-        response.push(currentPlace)
-        response.push(directionsToEvent(path[i].formatted_address, path[i+1].formatted_address,currentPlace.endTime));
+        if(path[i].primary) elapsed *= 2;
+        path[i].end_time = path[i].start_time+elapsed;
+        path[i].directions = (directionsToEvent(path[i].formatted_address, path[i+1].formatted_address,path[i].end_time));
+        path[i].photoURL = placeUtil.getPlacePhotoURL(path[i].photo.photo_reference,80);
     }
-    response.push(directionsToEvent(path[path.length],startLoc[0]+","+startLoc[1],response[response.length-1].endTime));
+    path[path.length].start_time = path[path.length-1].directions.end_time;
+    let elapsed = 3600;
+    if(path[path.length].primary) elapsed *= 2;
+    path[path.length].end_time = path[path.length].start_time+elapsed;
+    path[path.length].directions = (directionsToEvent(path[path.length].formatted_address, path[path.length+1].formatted_address,path[path.length].end_time));
+    path[path.length].photoURL = placeUtil.getPlacePhotoURL(path[path.length].photo.photo_reference,80);
+    path[path.length].directions = (directionsToEvent(path[path.length],startLoc[0]+","+startLoc[1],response[response.length].endTime));
 
     res.status(200).json(path);
 }));
