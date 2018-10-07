@@ -14,7 +14,32 @@ const weightPlaces = (places, weight) =>
         place.weight = place.rating * weight * (0.95 ** index);
         return place;
     });
-
+const placeToEvent = (place) => {
+    let event = {
+        "type":"place",
+        "name":place.name,
+        "photo_reference":place.photos.photo_reference,
+        "more_info":{
+            rating = place.rating,
+            tags = place.types,
+            address = place.formatted_address,
+        }
+    }
+    return event;
+};
+const directionsToEvent = (start, end, time) => {
+    let direction = await directionUtil.getDir(start, end, time);
+    let event = {
+        "type":"transit",
+        "name":"Transit from "+start.name+" to "+end.name,
+        "start_time":direction.routes[0].legs[0].departure_time.value,
+        "end_time":direction.routes[0].legs[0].arrival_time.value,
+        "more_info":{
+            "route":direction.routes[0].legs[0].steps,
+            "fare":direction.routes[0].fare.text,
+        }
+    }
+};
 const getHours = async (place, date) => {
     if (place.hours)
         return place.hours;
@@ -138,6 +163,7 @@ router.get('/create', wrap(async (req, res) => {
             const place = await nextOpenBetween(places, date, time);
             if (place) {
                 place.interval = time;
+                place.primary = true;
                 primaryPlaces.push(place);
             }
         }
@@ -153,6 +179,7 @@ router.get('/create', wrap(async (req, res) => {
                 const subPlace = await nextOpenBetween(places, date, time);
                 if (subPlace) {
                     subPlace.interval = time;
+                    subPlace.secondary = true;
                     subPlaces.push(subPlace);
                 }
             }
@@ -190,8 +217,20 @@ router.get('/create', wrap(async (req, res) => {
         windows);
 
     let path = (await promise).routes[0];
-
+    let response = {};
     path = path.map((p, index) => allPlaces[index]);
+    googleTime = date.getTime()/1000 + (Math.floor(startTime/100))*3600 + startTime%100*60;
+    response.push(directionsToEvent(startLoc[0]+","+startLoc[1],path[0].formatted_address,googleTime));
+    for(let i = 0; i<path.length-1; i++){
+        let currentPlace = placeToEvent(path[i]));
+        currentPlace.startTime = response[response.length-1].endTime;
+        let elapsed = 3600;
+        if(currentPlace.primary) elapsed *= 2;
+        currentPlace.endTime = currentPlace.startTime + elapsed;
+        response.push(currentPlace)
+        response.push(directionsToEvent(path[i].formatted_address, path[i+1].formatted_address,currentPlace.endTime));
+    }
+    response.push(directionsToEvent(path[path.length],startLoc[0]+","+startLoc[1],response[response.length-1].endTime));
 
     res.status(200).json(path);
 }));

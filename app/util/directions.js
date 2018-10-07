@@ -27,3 +27,4 @@ const getDir = async (origin, dest, time) => {
 };
 
 module.exports.getDistanceMatrix = getDistanceMatrix;
+module.exports.getDir = getDir;
