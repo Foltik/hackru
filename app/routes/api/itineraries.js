@@ -164,6 +164,7 @@ router.get('/create', wrap(async (req, res) => {
         .reduce((acc, curr) => [...acc, ...curr])
         .sort((a, b) => b.weight - a.weight);
     //remove duplicates
+    /*
     let ids = places.map(function (value){return value.place_id});
     for(let i = 0; i<ids.length; i++){
         while(ids.getIndex(ids[i], i+1) != -1){
@@ -171,6 +172,7 @@ router.get('/create', wrap(async (req, res) => {
             places.splice(ids.getIndex(ids[i],i+1),1);
         }
     }
+    */
     const times = timeFrames(startTime, endTime);
 
     /*
