@@ -20,9 +20,9 @@ const placeToEvent = (place) => {
         "name":place.name,
         "photo_reference":place.photos.photo_reference,
         "more_info":{
-            rating = place.rating,
-            tags = place.types,
-            address = place.formatted_address,
+            "rating": place.rating,
+            "tags": place.types,
+            "address": place.formatted_address,
         }
     }
     return event;
