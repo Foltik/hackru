@@ -230,14 +230,14 @@ router.get('/create', wrap(async (req, res) => {
     path[0].start_time=firstTime;
     for(let i = 0; i<path.length-1; i++){
         if(!path[i].start_time) path[i].start_time = path[i-1].directions.end_time;
-        elapsed = 3600;
+        let elapsed = 3600;
         if(path[i].primary) elapsed *= 2;
         path[i].end_time = path[i].start_time+elapsed;
         path[i].directions = (directionsToEvent(path[i].formatted_address, path[i+1].formatted_address,path[i].end_time));
         path[i].photoURL = placeUtil.getPlacePhotoURL(path[i].photo.photo_reference,80);
     }
     path[path.length].start_time = path[path.length-1].directions.end_time;
-    elapsed = 3600;
+    let elapsed = 3600;
     if(path[path.length].primary) elapsed *= 2;
     path[path.length].end_time = path[path.length].start_time+elapsed;
     path[path.length].directions = (directionsToEvent(path[path.length].formatted_address, path[path.length+1].formatted_address,path[path.length].end_time));
