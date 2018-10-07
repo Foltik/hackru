@@ -19,11 +19,15 @@ const getPlaceDetails = async (id) =>{
     let query = "https://maps.googleapis.com/maps/api/place/details/json?placeid="+id+"&fields=opening_hours"+key;
     return (await axios.get(query)).data.result;
 };
-
+const getPlacePhotoURL = async (photoid, maxheight) => {
+    let query = "https://maps.googleapis.com/maps/api/place/photo?maxheight="+maxheight+"&photoreference="+photoid+key;
+    return await axios.get(query);
+}
 
 module.exports.getPlacesWithinRange = getPlacesWithinRange;
 module.exports.getPlacesCity = getPlacesCity;
 module.exports.getPlaceDetails = getPlaceDetails;
+module.exports.getPlacePhotoURL = getPlacePhotoURL;
 
 
 /*
