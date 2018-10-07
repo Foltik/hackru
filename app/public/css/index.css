@@ -184,7 +184,13 @@ header {
    position: fixed;
    left: 0;
    bottom: 0;
-   width: 100%;
+   width: 50%;
    color: black;
    text-align: center;
+}
+.title{
+    text-align: center;
+    font: 35px 'FontAwesome', sans-serif;
+    font-weight: 400;
+    color: #000;
 }
