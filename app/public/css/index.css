@@ -2,195 +2,223 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
-*, *:before, *:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono);
+*,:after,:before {
+    margin:0;
+    padding:0;
+    box-sizing:border-box
 }
-
 body {
-    font: 18px 'FontAwesome', sans-serif;
-    font-weight: 400;
-    color: #000;
-    background: #fff;
+    font:18px FontAwesome,sans-serif;
+    font-weight:400;
+    color:#000;
 }
-
 .container {
-    display: flex;
-    flex-direction: row;
-    width: 100vw;
-    height: 100vh;
+    display:flex;
+    flex-direction:row;
 }
-
 .view {
-    width: auto;
-    height: auto;
-    background: #fff;
-    padding: 20px;
-    flex-grow: 1;
+    width:auto;
+    height:auto;
+    background:#fff;
+    padding:20px;
+    flex-grow:1
 }
-
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    width: 360px;
-    background: #222;
+    display:flex;
+    flex-direction:column;
+    width:360px;
+    background:#222
 }
-
-
 .sidebar-title {
-    height: 80px;
-
-    cursor: pointer;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 60px;
+    height:80px;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:60px
 }
-
 .sidebar-title span {
-    color: #fff;
-    font-size: 40px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    color:#fff;
+    font-size:40px;
+    text-transform:uppercase;
+    letter-spacing:2px
 }
-
 .nav li {
-    background: #222;
-    padding: 20px 50px 20px 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    color: #eee;
+    background:#222;
+    padding:20px 50px 20px 50px;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    color:#eee
 }
-
 .nav li a {
-    font-size: 24px;
-    color: #eee;
-    text-decoration: none;
-    outline: none;
+    font-size:24px;
+    color:#eee;
+    text-decoration:none;
+    outline:0
 }
-
 .nav li.active {
-    background: #151515;
-    color: #ff2400
+    background:#151515;
+    color:#ff2400
 }
-
 i {
-    font-size: 14px;
+    font-size:14px
 }
 input[type=text] {
-    font: 12px 'FontAwesome', sans-serif;
-	border-radius: 25px;
-    width: 50%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 3px solid #ccc;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
-    outline: none;
+    font:12px FontAwesome,sans-serif;
+    border-radius:25px;
+    width:50%;
+    padding:12px 20px;
+    margin:8px 0;
+    box-sizing:border-box;
+    border:3px solid #ccc;
+    -webkit-transition:.5s;
+    transition:.5s;
+    outline:0
 }
-
 input[type=text]:focus {
-    border: 3px solid #555;
+    border:3px solid #555
 }
-[type="date"] {
-    font: 12px 'FontAwesome', sans-serif;
-    background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
-    border-radius: 25px;
-    width: 50%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 3px solid #ccc;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
-    outline: none;
+[type=date] {
+    font:12px FontAwesome,sans-serif;
+    background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png) 97% 50% no-repeat;
+    border-radius:25px;
+    width:50%;
+    padding:12px 20px;
+    margin:8px 0;
+    box-sizing:border-box;
+    border:3px solid #ccc;
+    -webkit-transition:.5s;
+    transition:.5s;
+    outline:0
 }
-[type="date"]::-webkit-inner-spin-button {
-  display: none;
+[type=date]::-webkit-inner-spin-button {
+    display:none
 }
-[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0;
+[type=date]::-webkit-calendar-picker-indicator {
+    opacity:0
 }
-[type="time"]{
-    font: 12px 'FontAwesome', sans-serif;
-    border-radius: 25px;
-    width: 10%;
-    padding: 10px 10px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 3px solid #ccc;
-    -webkit-transition: 0.5s;
-    transition: 0.5s;
-    outline: none;
+[type=time] {
+    font:12px FontAwesome,sans-serif;
+    border-radius:25px;
+    width:10%;
+    padding:10px 10px;
+    margin:8px 0;
+    box-sizing:border-box;
+    border:3px solid #ccc;
+    -webkit-transition:.5s;
+    transition:.5s;
+    outline:0
 }
 .slidecontainer {
-    width: 100%;
+    width:100%
 }
-
 .slider {
-    margin-left: 20px;
-    -webkit-appearance: none;
-    width: 800%;
-    height: 10px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
+    margin-left:20px;
+    -webkit-appearance:none;
+    width:800%;
+    height:10px;
+    border-radius:5px;
+    background:#d3d3d3;
+    outline:0;
+    opacity:.7;
+    -webkit-transition:.2s;
+    transition:opacity .2s
 }
 .slider:hover {
-    opacity: 1;
+    opacity:1
 }
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #ff2400;
-    cursor: pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    background:#ff2400;
+    cursor:pointer
 }
-
 .slider::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    border-radius: 25%;
-    background: #ff2400;
-    cursor: pointer;
+    width:15px;
+    height:15px;
+    border-radius:25%;
+    background:#ff2400;
+    cursor:pointer
 }
 header {
-    background-color: #ccc;
-    padding: 30px;
-    text-align: center;
-    font-size: 35px;
-    color: white;
+    background-color:#ccc;
+    padding:30px;
+    text-align:center;
+    font-size:35px;
+    color:#fff
 }
 .tablecell {
-    font: 12px 'FontAwesome', sans-serif;
-    border: 3px solid #ccc;
-    padding: 15px;
-    border-spacing: 25px;
-    border-radius: 25px;
-    margin: 30px;
+    font:12px FontAwesome,sans-serif;
+    border:3px solid #ccc;
+    padding:15px;
+    border-spacing:25px;
+    border-radius:25px;
+    margin:30px
 }
-.footer {
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 50%;
-   color: black;
+tr {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:5px;
+    flex-grow:1
+}
+td {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    padding:5px;
+    flex-grow:1
+}
+td input {
+    flex-grow:1
+}
+td span {
+    padding-left:10px
+}
+.card-container {
+    display:flex;
+    flex-direction:column;
+    max-width: 800px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.card {
+    background: #fff;
+    display:flex;
+    flex-direction:row;
+    padding: 30px;
+    border: 2px solid #aaa;
+    /*box-shadow: 5px 3px 8px #888888;*/
+    justify-content: space-around;
+    align-items: center;
+    min-width: 800px;
+    border-radius: 4px;
+}
+.card img {
+    justify-self: flex-start;
+}
+.card-info {
+    display:flex;
+    flex-direction:column;
+    padding:10px;
+}
+.lower {
+    display:flex;
+    flex-direction:column;
+    max-width: 600px;
 
 }
-.title{
-    text-align: center;
-    font: 30px 'FontAwesome', sans-serif;
-    font-weight: 400;
-    color: #000;
+.lower-item {
+    border:1px solid #aaa;
+    padding:5px;
+    border-top: none;
 }
+
