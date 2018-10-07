@@ -12,7 +12,7 @@ Angular.js
 Express.js
 [Google Distance Matrix Api](https://developers.google.com/maps/documentation/distance-matrix/intro) - For route optimization
 
-##Authors
+## Authors
 * Jack Foltz
 * Jacques Scheire
 * Max Shi
