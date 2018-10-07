@@ -3,25 +3,26 @@
     <br>
     <form>
         Where Will You Be Staying?<br>
-        <input type="text" name="loc">
+        <input type="text" name="loc" ng-model="loc">
         <br>
         Radius or Within a City?<br>
-        <input type="text" name="radius">
+        <input type="text" name="radius" ng-model="rad">
         <br>
         Date?<br>
-        <input type="date" name="date">
+        <input type="date" name="date" ng-model="date">
         <br>
         Time?<br>
-        From <input type="time" name="starttime"> To <input type="time" name="endtime">
+        From <input type="time" name="starttime" ng-model="starttime"> To <input type="time" name="endtime" ng-model="endttime">
         <br>
         What are you interested in?
         <div class="slidecontainer">
             <table style="width:10%"><br>
-                <tr><td>Art</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange"><br></td></tr>
-                <tr><td>Parks</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange"></td></tr>
-                <tr><td>Landmarks</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange"></td></tr>
-                <tr><td>Nightlife</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange"></td></tr>
-                <tr><td>Shopping</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange"></td></tr>
+                <tr><td>Art</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="art"><br></td></tr>
+                <tr><td>Parks</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="parks"></td></tr>
+                <tr><td>Landmarks</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="landmarks"></td></tr>
+                <tr><td>Nightlife</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="nightlife"></td></tr>
+                <tr><td>Shopping</td><td><input type="range" min="0" max="10" value="5" class="slider" id="myRange" ng-model="shopping"></td></tr>
             </table>
         </div>
+    </form>
 </div>

@@ -165,3 +165,21 @@ input[type=text]:focus {
     background: #ff2400;
     cursor: pointer;
 }
+header {
+    background-color: #ccc;
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+}
+.tablecell {
+    font: 12px 'FontAwesome', sans-serif;
+    border: 3px solid #ccc;
+    padding: 15px;
+    border-spacing: 25px;
+    border-radius: 25px;
+    margin: 30px;
+}
+/*th, td{
+    padding: 15px;
+}*/
