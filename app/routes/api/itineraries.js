@@ -5,22 +5,88 @@ const config = require('config');
 const ModelPath = '../../models/';
 
 const wrap = require('../../util/wrap.js');
-const places = require('../../util/places.js');
+const placeUtil = require('../../util/places.js');
+const directionUtil = require('../../util/directions.js');
+
+const weightPlaces = (places, weight) =>
+    places.map((place, index) => {
+        place.weight = place.rating * weight * (0.95 ** index);
+        return place;
+    });
+
+const getHours = (place, date) => {
+    if (place.hours)
+        return place.hours;
+
+    const day = date.getDay();
+    const period = placeUtil.getDetails(place).periods.find(period => period.open.day === day);
+
+    place.hours = {
+        opening: period.open.time,
+        closing: period.close.day === day ? period.close.time : period.close.time + 2400
+    };
+
+    return place.hours;
+};
+
+const nextOpenBetween = (places, date, interval) => {
+    const place = places.find(place =>
+        getHours(place, date).opening <= interval.start &&
+        getHours(place, date).closing >= interval.end &&
+        !place.used);
+    place.used = true;
+    return place;
+};
+
+const nextOpenBetweenN = (places, date, interval, n) =>
+    [...Array(n)].map(() => nextOpenBetween(places, date, interval));
+
+const addTimeFrameMeta = timeFrame => {
+    timeFrame.delta = Math.max(timeFrame.end - timeFrame.start, 0);
+    timeFrame.numEvents = Math.floor(timeFrame.delta / 1.5);
+    timeFrame.numSubEvents = Math.max(numEvents - 1, 0);
+    return timeFrame;
+};
+
+const timeFrames = (startTime, endTime) => {
+    // [startTime, 1200]
+    const morning = {
+        start: startTime,
+        end: 1200
+    };
+
+    // [1300 or startTime, 1900 or endTime]
+    const afternoon = {
+        start: Math.min(1900, endTime),
+        end: Math.max(1300, startTime)
+    };
+
+    // [2000 or endTime, 2600 or endTime]
+    const night = {
+        start: Math.min(2000, endTime),
+        end: Math.min(2600, endTime)
+    };
+
+    return [
+        addTimeFrameMeta(morning),
+        addTimeFrameMeta(afternoon),
+        addTimeFrameMeta(night)
+    ];
+
+    return {
+        morning: addTimeFrameMeta(morning),
+        afternoon: addTimeFrameMeta(afternoon),
+        night: addTimeFrameMeta(night)
+    };
+};
+
 
 router.get('/create', wrap(async (req, res) => {
-    // string
     const startLoc = req.body.startLoc;
-
-    // unix timestamp
     const startTime = req.body.startTime;
-
-    // unix timestamp
     const endTime = req.body.endTime;
-
-    // unix timestamp
     const date = req.body.date;
-
-    // number
+    const dateNoon = date + 60 * 60 * 12;
     const radius = req.body.radius;
 
     /*
@@ -29,83 +95,26 @@ router.get('/create', wrap(async (req, res) => {
         {query: 'park', weight: 6}
     ];
     */
+
     const categories = req.body.categories;
 
-
-    const calcWeights = (places, weight) =>
-        places.map((place, index) => {
-            place.weight = place.rating * weight * (0.95 ** index);
-            return place;
-        });
-
     const search = radius
-        ? category => calcWeights(places.getPlacesWithinRange(startLoc, radius, category.query), category.weight)
-        : category => calcWeights(places.getPlacesCity(city, category.query), category.weight);
+        ? category => weightPlaces(placeUtil.searchWithinRange(startLoc, radius, category.query), category.weight)
+        : category => weightPlaces(placeUtil.searchWithinCity(city, category.query), category.weight);
 
     const places = categories.map(search).sort((a, b) => b.weight - a.weight);
 
-    dayPeriods = [false, false, false];
-    if (startTime < 1200) dayPeriods[0] = true;
-    if (startTime < 1900 && endTime > 1300) dayPeriods[1] = true;
-    if (startTime < 2500 && endTime > 2000) dayPeriods[2] = true;
+    const times = timeFrames(startTime, endTime);
 
-    counter = 0;
-    dayOfWeek = date.getDay()
-    mainPlaces = [null, null, null]
-    while (dayPeriods[0]) {
-        if (!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
-        for (int i = 0;
-        i < places[counter].opening_hours.periods.length;
-        i++
-    )
-        {
-            if (places[counter].opening_hours.periods.open.day == dayOfWeek) {
-                if (open < 1200) {
-                    dayPeriods[0] = false;
-                    mainPlaces[0] = places[counter];
-                    places[counter].used = true;
-                }
-            }
-        }
-        counter++;
-    }
-    counter = 0
-    while (dayPeriods[1]) {
-        if (!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
-        for (int i = 0;
-        i < places[counter].opening_hours.periods.length;
-        i++
-    )
-        {
-            if (places[counter].opening_hours.periods.open.day == dayOfWeek) {
+    const primaryPlaces = times.map(time =>
+        time.numEvents ? nextOpenBetween(places, date, time) : undefined);
 
-                if (open < 1900 && close > 1400) {
-                    dayPeriods[1] = false;
-                    mainPlaces[1] = places[counter];
-                    places[counter].used = true;
-                }
-            }
-        }
-        counter++;
-    }
-    counter = 0
-    while (dayPeriods[2]) {
-        if (!places[counter].used && !places[counter].opening_hours.periods) places[counter].opening_hours = getPlaceDetails(places[counter].reference).opening_hours;
-        for (int i = 0;
-        i < places[counter].opening_hours.periods.length;
-        i++
-    )
-        {
-            if (places[counter].opening_hours.periods.open.day == dayOfWeek) {
-                if (open < 2500 && close > 2000) {
-                    dayPeriods[2] = false;
-                    mainPlaces[2] = places[counter];
-                    places[counter].used = true;
-                }
-            }
-        }
-        counter++;
-    }
+    // Limit nextOpenBetween by a smaller radius?
+    const subPlaces = times.map(time =>
+        time.numSubEvents ? [...Array(time.numSubEvents)].map(nextOpenBetween(places, date, time)) : []);
+
+    const costs = directionUtil.getDistanceMatrix(...[primaryPlaces], ...[subPlaces], dateNoon);
+
 
 
     res.sendStatus(200);
