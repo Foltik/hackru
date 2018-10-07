@@ -170,8 +170,8 @@ router.get('/create', wrap(async (req, res) => {
     const allPlaces = [...primaryPlaces, ...subPlaces];
     const allDurations = [...primaryDurations, ...subPlaceDurations];
     const windows = [
-        ...primaryPlaces.map(place => [place.interval.start, place.interval.end]),
-        ...subPlaces.map(subPlace => [subPlace.interval.start, subPlace.interval.end])
+        ...primaryPlaces.map(place => [0, 30000/*place.interval.start, place.interval.end*/]),
+        ...subPlaces.map(subPlace => [0, 30000/*subPlace.interval.start, subPlace.interval.end*/])
     ];
     console.log('WINDOWS:');
     console.log(windows);
@@ -182,12 +182,16 @@ router.get('/create', wrap(async (req, res) => {
 
     const costs = await directionUtil.getDistanceMatrix(allPlaces, date);
 
-    const path = optimization.findPath(
+    const promise = optimization.findPath(
         endTime,
         allPlaces.length,
         costs,
         allDurations,
         windows);
+
+    let path = (await promise).routes[0];
+
+    path = path.map((p, index) => allPlaces[index]);
 
     res.status(200).json(path);
 }));

@@ -13,7 +13,7 @@ const getDistanceMatrix = async (places, time) => {
     for (let i = 0; i < res.data.rows.length; i++) {
         matrix.push([]);
         for (let j = 0; j < res.data.rows[i].elements.length; j++) {
-            matrix[i].push(res.data.rows[i].elements[j].duration.value / 60);
+            matrix[i].push(res.data.rows[i].elements[j].duration.value / 60 / 60);
         }
     }
     return matrix;

@@ -4,12 +4,13 @@ const fill = (n, val) =>
     [...Array(n)].map(() => val);
 
 const fill2d = (n, val) =>
-    [...Array(n)].map(fill(n, val));
+    [...Array(n)].map(() =>
+        [...Array(n)].map(() => val));
 
 const compositeDurations = (costs, durations) => {
     let composite = costs.slice(0);
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n; j++) {
+    for (let i = 0; i < costs.length; i++) {
+        for (let j = 0; j < costs.length; j++) {
             composite[i][j] += durations[i];
         }
     }
