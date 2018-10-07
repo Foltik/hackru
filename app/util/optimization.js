@@ -23,7 +23,7 @@ const compositeDurations = (costs, durations) => {
 // costs: 2d array where [i, j] is distance from i to j
 // durations: array where [i] is the time spent at i
 // windows: array of pairs where [i] contains [a, b] where a and b are start and end time windows
-const findPath = (deltaTime, n, costs, durations, windows) => {
+const findPath = (endTime, n, costs, durations, windows) => {
     const createOpts = {
         numNodes: n,
         costs: costs,
@@ -36,7 +36,7 @@ const findPath = (deltaTime, n, costs, durations, windows) => {
         computeTimeLimit: 10000,
         numVehicles: 1,
         depotNode: 0,
-        timeHorizon: deltaTime,
+        timeHorizon: endTime,
         vehicleCapacity: 2147483647,
         routeLocks: [[]],
         pickups: [],
@@ -48,3 +48,5 @@ const findPath = (deltaTime, n, costs, durations, windows) => {
         vrp.Solve(searchOpts, (err, solution) => err ? reject(err) : resolve(solution))
     });
 };
+
+module.exports.findPath = findPath;
