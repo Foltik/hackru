@@ -27,7 +27,7 @@ const placeToEvent = (place) => {
     }
     return event;
 };
-const directionsToEvent = (start, end, time) => {
+const directionsToEvent = async(start, end, time) => {
     let direction = await directionUtil.getDir(start, end, time);
     let event = {
         "type":"transit",
@@ -39,6 +39,7 @@ const directionsToEvent = (start, end, time) => {
             "fare":direction.routes[0].fare.text,
         }
     }
+    return event;
 };
 const getHours = async (place, date) => {
     if (place.hours)
@@ -222,7 +223,7 @@ router.get('/create', wrap(async (req, res) => {
     googleTime = date.getTime()/1000 + (Math.floor(startTime/100))*3600 + startTime%100*60;
     response.push(directionsToEvent(startLoc[0]+","+startLoc[1],path[0].formatted_address,googleTime));
     for(let i = 0; i<path.length-1; i++){
-        let currentPlace = placeToEvent(path[i]));
+        let currentPlace = placeToEvent(path[i]);
         currentPlace.startTime = response[response.length-1].endTime;
         let elapsed = 3600;
         if(currentPlace.primary) elapsed *= 2;
