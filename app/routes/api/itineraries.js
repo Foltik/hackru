@@ -160,7 +160,14 @@ router.get('/create', wrap(async (req, res) => {
     const places = (await Promise.all(categories.map(search)))
         .reduce((acc, curr) => [...acc, ...curr])
         .sort((a, b) => b.weight - a.weight);
-
+    //remove duplicates
+    let ids = places.map(function (value){return value.place_id});
+    for(let i = 0; i<ids.length; i++){
+        while(ids.getIndex(ids[i], i+1) != -1){
+            ids.splice(ids.getIndex(ids[i],i+1),1);
+            places.splice(ids.getIndex(ids[i],i+1),1);
+        }
+    }
     const times = timeFrames(startTime, endTime);
 
     /*
