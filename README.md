@@ -10,6 +10,7 @@ itinegen.com
 * Node.js
 * Angular.js
 * Express.js
+* Google Places API
 * [Google Distance Matrix Api](https://developers.google.com/maps/documentation/distance-matrix/intro) - For route optimization
 
 ## Authors
